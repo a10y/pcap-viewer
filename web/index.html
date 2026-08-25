@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#081015" />
+    <meta name="description" content="Inspect PCAP and PCAPNG captures locally in your browser." />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <title>pcap·analyze</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <svg viewBox="0 0 28 28" aria-hidden="true">
+            <path d="M4 9.5 14 4l10 5.5v9L14 24 4 18.5z" />
+            <path d="M4 9.5 14 15l10-5.5M14 15v9" />
+          </svg>
+          <div><strong>pcap</strong><span>·analyze</span></div>
+        </div>
+
+        <button id="open-file" class="open-button" type="button">
+          <span>Open capture</span><kbd>⌘ O</kbd>
+        </button>
+        <input id="file-input" type="file" accept=".pcap,.pcapng,application/vnd.tcpdump.pcap" hidden />
+
+        <section class="capture-summary">
+          <p class="eyebrow">Capture</p>
+          <h2 id="capture-name">No file loaded</h2>
+          <p id="capture-meta" class="muted">Drop a capture to begin.</p>
+          <dl class="stats-grid">
+            <div><dt>Packets</dt><dd id="stat-packets">—</dd></div>
+            <div><dt>Flows</dt><dd id="stat-flows">—</dd></div>
+            <div><dt>Entities</dt><dd id="stat-entities">—</dd></div>
+            <div><dt>Indexed</dt><dd id="stat-bytes">—</dd></div>
+          </dl>
+        </section>
+
+        <section class="privacy-note">
+          <span class="status-dot"></span>
+          <div><strong>Local only</strong><p>Your capture never leaves this browser.</p></div>
+        </section>
+      </aside>
+
+      <main class="workspace">
+        <header class="toolbar">
+          <div>
+            <p class="eyebrow">Time-ordered traffic</p>
+            <h1>Flow log</h1>
+          </div>
+          <div class="toolbar-actions">
+            <span id="render-badge" class="badge">Starting WebGPU…</span>
+            <button id="close-detail" class="icon-button" type="button" title="Close detail" hidden>×</button>
+          </div>
+        </header>
+
+        <section id="empty-state" class="empty-state">
+          <div class="drop-illustration" aria-hidden="true">
+            <span class="packet p1"></span><span class="packet p2"></span><span class="packet p3"></span>
+            <svg viewBox="0 0 64 64"><path d="M32 42V13m0 0L21 24m11-11 11 11M13 38v11a5 5 0 0 0 5 5h28a5 5 0 0 0 5-5V38" /></svg>
+          </div>
+          <h2>Drop a packet capture anywhere</h2>
+          <p>PCAP and PCAPNG are parsed incrementally in a local WebAssembly worker.</p>
+          <button id="empty-open" type="button">Choose a file</button>
+        </section>
+
+        <section id="log-view" class="log-view" hidden>
+          <div class="log-header" aria-hidden="true">
+            <span>Time</span><span>Protocol</span><span>Source</span><span>Destination</span><span>Summary</span><span>Bytes</span>
+          </div>
+          <div id="flow-scroll" class="flow-scroll" tabindex="0">
+            <div id="log-spacer" class="log-spacer">
+              <div id="viewport-stack" class="viewport-stack">
+                <canvas id="flow-canvas"></canvas>
+                <div id="row-labels" class="row-labels" role="list"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <aside id="detail-panel" class="detail-panel" role="dialog" aria-label="Traffic detail" tabindex="-1" hidden>
+        <div id="detail-content"></div>
+      </aside>
+    </div>
+
+    <footer class="statusbar">
+      <div role="status" aria-live="polite"><span id="status-light" class="status-light"></span><span id="status-text">Ready for a capture</span></div>
+      <div id="progress-wrap" class="progress-wrap" role="progressbar" aria-label="Capture indexing progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden><div id="progress-bar"></div></div>
+      <div id="status-right">WASM parser · static bundle</div>
+    </footer>
+
+    <div id="drop-overlay" class="drop-overlay" hidden>
+      <div><strong>Drop to inspect</strong><span>The file stays on this device</span></div>
+    </div>
+    <div id="host-popover" class="host-popover" hidden></div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

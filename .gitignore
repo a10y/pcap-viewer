@@ -1,0 +1,30 @@
+# Rust
+target/
+**/*.rs.bk
+
+# wasm-pack build output
+/pkg/
+
+# Static site build output
+/dist/
+
+# Local env / secrets
+.env
+.env.local
+
+# Logs
+*.log
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Sample capture files (keep repo lightweight)
+*.pcap
+*.pcapng

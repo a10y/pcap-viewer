@@ -1,0 +1,41 @@
+[package]
+name = "pcap-analyze"
+version = "0.1.0"
+edition = "2021"
+description = "A fully client-side PCAP and PCAPNG flow viewer"
+license = "MIT"
+repository = "https://github.com/your-org/pcap-analyze"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+bytemuck = { version = "1.22", features = ["derive"] }
+console_error_panic_hook = "0.1"
+js-sys = "0.3"
+serde = { version = "1", features = ["derive"] }
+serde-wasm-bindgen = "0.6"
+wasm-bindgen = "0.2"
+wasm-bindgen-futures = "0.4"
+wgpu = { version = "26", default-features = false, features = ["webgpu", "wgsl"] }
+
+[dependencies.web-sys]
+version = "0.3"
+features = [
+  "Document",
+  "Element",
+  "HtmlCanvasElement",
+  "Window",
+]
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+panic = "abort"
+strip = true
+
+[package.metadata.wasm-pack.profile.release]
+# Current Rust emits bulk-memory instructions that wasm-pack's bundled wasm-opt
+# can reject. Rust release optimization still applies.
+wasm-opt = false

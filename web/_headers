@@ -1,0 +1,9 @@
+/*.wasm
+  Content-Type: application/wasm
+  Cache-Control: public, max-age=0, must-revalidate
+
+/pkg/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/*.html
+  Cache-Control: no-cache
